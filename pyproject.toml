@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "mycves"
+version = "0.1.0"
+description = "Regularly get CVE updates for your products from the NIST CVE API"
+authors = ["Christian Prinsler"]
+license = "GNU GPL"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+PyYAML = "^6.0"
+aiosmtplib = "^1.1.6"
+httpx = "^0.22.0"
+types-PyYAML = "^6.0.5"
+Jinja2 = "^3.1.0"
+
+[tool.poetry.dev-dependencies]
+mypy = "^0.942"
+pytest = "^7.1.1"
+black = "^22.1.0"
+isort = "^5.10.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

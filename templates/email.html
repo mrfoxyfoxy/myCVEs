@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVE Update</title>
+
+    <style>
+      * {
+        font-family: sans-serif;
+      }
+      
+      .content-table {
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 0.9em;
+        min-width: 600px;
+        border-radius: 5px 5px 0 0;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+      }
+      
+      .content-table thead tr {
+        background-color: #2355b3;
+        color: #ffffff;
+        text-align: center;
+        font-weight: bold;      
+      }
+      
+      .content-table th,
+      .content-table td {
+        padding: 12px 15px;
+      }
+      .content-table tr {
+        text-align: left;
+      }
+      
+      .content-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+      }
+      
+      .content-table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+      }
+      
+      .content-table tbody tr:last-of-type {
+        border-bottom: 2px solid #071cd8;
+      }
+      .content-table {
+        border-collapse: collapse; 
+        border-spacing: 0;
+      }
+      .section {
+        border-top: 1em solid transparent;
+      }
+        
+    </style>
+</head>
+
+<div id="email" style="width:700px; margin: auto;background:rgb(9, 71, 141);">   
+  <table role="presentation" border="0" width="100%" cellspacing="0">
+    <tr>
+      <td align="center" style="background-color: rgb(9, 71, 141); color: rgb(255, 255, 255);">        
+        <h1 style="font-size: 42px; margin:20px 0 20px 0; font-family:sans-serif;">
+          {{title}}
+        </h1>
+      </td>
+    </tr>        
+  </table> 
+</div>
+
+{% for job in jobs %}
+
+{% if job.updates %}
+{% set cve_list = [job.new_cves, job.updated_cves] %}
+{% else %}
+{% set cve_list = [job.new_cves] %}
+{% endif %}
+{% for cves in cve_list %}
+{% if cves %}
+
+<div id="new_cves" style="width:600px;margin: auto;background:white;">   
+  <table role="presentation" border="0" width="100%" cellspacing="0">
+      <tr>
+          <td >
+              <h2 align=center style="font-size: 28px; margin:40px 0 20px 0; font-family:sans-serif;">
+                {% if loop.index0 == 0 and cves == job.new_cves %}
+                New CVEs for {{job.vendor}}
+                {% else %}
+                Updated CVEs for {{job.vendor}}
+                {% endif %}
+              </h2>
+              {% for cve in cves %}                            
+              {% if cve.cve_score.base_severity == "CRITICAL" %}
+              {% set severity_color = "#700000" %}
+              {% elif cve.cve_score.base_severity == "HIGH" %}
+              {% set severity_color = "#ff0000" %}
+              {% elif cve.cve_score.base_severity == "MEDIUM" %}
+              {% set severity_color = "#ff7b00" %}
+              {% else %}}
+              {% set severity_color = "#000000" %}
+              {% endif %}
+
+              <table class="content-table" width="100%" cellspacing="0"> 
+                  <thead>
+                      <tr>
+                          <th colspan="5" style="font-size: 16px">{{cve.cve.id}}</th>
+                      </tr>
+                  </thead>
+                  <tbody> 
+                      <tr>
+                        <td style="font-weight: bold">                                                   
+                          Published                          
+                        </td>                          
+                        <td>                  
+                          {% if cve.cve.published %}                                   
+                          {{cve.cve.published}}      
+                          {% endif %}                     
+                        </td>
+                        <td style="font-weight: bold">                                        
+                          Modified                          
+                        </td>
+                        <td>
+                          {% if cve.cve.modified %}                           
+                          {{cve.cve.modified}}                          
+                          {% endif %} 
+                        </td>
+                        <td></td>
+                      </tr>                         
+                      <tr>
+                        <td style="font-weight: bold">Vendor</td>                          
+                        <td>{{job.vendor}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>         
+                      <tr style="height: 20px"></tr>  
+                      <tr>
+                        <td style="font-weight: bold">Base Severity</td>
+                        <td style="font-weight: bold">Base Score</td>
+                        <td style="font-weight: bold">Exploitability Score</td>
+                        <td style="font-weight: bold">Impact Score</td>
+                        <td style="font-weight: bold">Attack Vector</td>
+                      </tr>
+                      <tr>
+                        <td style="font-weight: bold; color: {{severity_color}}">{{cve.cve_score.base_severity}}</td>
+                        <td style="font-weight: bold; color: {{severity_color}}">{{cve.cve_score.base_score}}</td>
+                        <td>{{cve.cve_score.exploitability_score}}</td>
+                        <td>{{cve.cve_score.impact_score}}</td>
+                        <td>{{cve.cve_score.attack_vector}}</td>
+                      </tr>
+                      <tr style="height: 20px"></tr>    
+                      <tr>
+                        <td colspan="5" style="font-weight: bold">Description</td>
+                      </tr>
+                      {% for description in cve.cve.description %}
+                      <tr>
+                        <td colspan="5">{{description}}</td>
+                      </tr>
+                      {% endfor %}
+                      <tr style="height: 20px"></tr>       
+                      <tr>
+                        <td colspan="5" style="font-weight: bold">URLs</td>
+                      </tr>
+                      {% for url in cve.cve.urls %}
+                      <tr>
+                        <td colspan="5" style="font-weight: bold">
+                          <a href={{url}} style="color:#0d2692;text-decoration:underline;">{{url}}</a>
+                        </td>
+                      </tr>
+                      {% endfor %}       
+                      <tr>
+                        <td colspan="5" style="font-weight: bold">
+                          <a href=https://nvd.nist.gov/vuln/detail/{{cve.cve.id}} style="color:#0d2692;text-decoration:underline;">https://nvd.nist.gov/vuln/detail/{{cve.cve.id}}</a>
+                        </td>
+                      </tr>                                                         
+                      <tr style="height: 20px"></tr>
+                      <tr>
+                        <td colspan = "3" style="font-weight: bold">Affected Product</td>
+                        <td style="font-weight: bold">Version Start</td>
+                        <td style="font-weight: bold">Version End</td>
+                      </tr>
+                      {% for cpe in cve.cpes %}
+                      <tr>
+                        <td colspan = "3">{{cpe.cpe_match}}</td>
+                        <td>
+                          {% if cpe.version_start %}
+                          {{cpe.version_start}}
+                          {% endif %}
+                        </td>
+                        <td>
+                          {% if cpe.version_end %}
+                          {{cpe.version_end}}
+                          {% endif %}
+                        </td>
+                      </tr>
+                      {% endfor %}                        
+                  </tbody>                    
+              </table>                        
+              {% endfor %}
+          </td> 
+       </tr>
+  </table>
+</div>
+{% endif %}
+{% endfor %}
+
+{% endfor %}
+</html>

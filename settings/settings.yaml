@@ -1,0 +1,15 @@
+---
+url: https://services.nvd.nist.gov/rest/json/cves/1.0/
+job_path: jobs
+log_path: logs/cvenotifier.log
+admin_email: admin@fox.world
+mail:
+  sender: infosec@fox.world
+  mailserver: 172.16.13.30
+  port: ""
+  tls: false
+  starttls: false
+  verify: false
+  auth: false
+  username: ""  
+...

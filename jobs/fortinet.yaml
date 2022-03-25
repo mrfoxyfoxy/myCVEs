@@ -1,0 +1,19 @@
+---
+starttime: 1
+interval: 1
+updates: true
+send_to: dreadchrisp@gmail.com
+jobs:
+- vendor: Fortinet
+  products:
+  - fortios
+  - fortigate
+  - fortianalyzer
+  - fortimanager
+  - fortiauthenticator
+  - forticlient
+  - fortinet enterprise management server  
+  - fortinet ems  
+  - forticlient ems  
+  additional_parameters: {}
+...

@@ -1,0 +1,20 @@
+---
+starttime: 1
+interval: 1
+updates: true
+send_to: dreadchrisp@gmail.com
+jobs:
+- vendor: Cisco
+  products: 
+  - nexus         
+  - catalyst
+  - annyconnect
+  - annyconnect client
+  - annyconnect_client
+  - dcnm
+  - data center network manager
+  - data_center_network_manager
+  - adaptive security appliance 
+  - nx-os     
+  additional_parameters: {}    
+...
