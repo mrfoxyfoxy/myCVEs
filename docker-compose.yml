@@ -1,0 +1,11 @@
+myCVEs:
+  image: mycves:0.1.0
+  restart: always
+  stdin_open: true
+  tty: true
+  volumes:
+    - /opt/myCVEs/settings:/myCVEs/settings
+    - /opt/myCVEs/logs:/myCVEs/logs
+    - /opt/myCVEs/jobs:/myCVEs/jobs
+    - /etc/localtime:/etc/localtime:ro
+  command: ["/bin/bash", "-c", "cron -f"]
