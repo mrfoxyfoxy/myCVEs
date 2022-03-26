@@ -133,6 +133,7 @@ async def send_email(
     start a server
     and send the mail
     """
+    # !Todo: move create_email out of this coro and apply retry deco to send_email instead of create_connection
     message = create_email(settings, job_group)
     try:
         # ! because smtp is a sequential protocl, we need multiple connections to split the work for multiple emails

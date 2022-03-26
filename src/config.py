@@ -16,6 +16,8 @@ from dataclasses import dataclass, field
 
 from logger import get_logger
 
+path = Path(__file__).parent.parent
+
 
 @dataclass
 class MailSettings:
@@ -68,17 +70,17 @@ class Settings:
         alternative constructor
         creates settings object from the configuration files in the hardcoded path
         """
-        with Path.cwd().joinpath("settings", "settings.yaml").open("r") as file:
+        with path.joinpath("settings", "settings.yaml").open("r") as file:
             settings = yaml.safe_load(file)
-        with Path.cwd().joinpath("settings", ".secrets.yaml").open("r") as file:
+        with path.joinpath("settings", ".secrets.yaml").open("r") as file:
             secrets = yaml.safe_load(file)
         mail_settings = MailSettings(
             **settings["mail"], smtp_password=secrets["smtp_password"]
         )
         return cls(
             url=settings["url"],
-            log_path=Path.cwd().joinpath(settings["log_path"]),
-            job_path=Path.cwd().joinpath(settings["job_path"]),
+            log_path=path.joinpath(settings["log_path"]),
+            job_path=path.joinpath(settings["job_path"]),
             admin_email=settings["admin_email"],
             api_key=secrets["api_key"],
             mail=mail_settings,
@@ -92,8 +94,7 @@ class JobStates:
     last_run: last time the jobs were finished
     """
 
-    last_run: dict = field(init=False)    
-
+    last_run: dict = field(init=False)
 
     def __post_init__(self):
         """
@@ -105,9 +106,9 @@ class JobStates:
         """
         retrieve last time when the jobs were startet
         """
-        path = Path.cwd().joinpath("settings", "last_run.yaml")
-        if path.exists():
-            with path.open("r") as file:
+        last_run_path = path.joinpath("settings", "last_run.yaml")
+        if last_run_path.exists():
+            with last_run_path.open("r") as file:
                 last_run = yaml.safe_load(file)
                 return last_run if last_run is not None else {}
         else:
@@ -117,7 +118,7 @@ class JobStates:
         """
         save last time when the jobs were startet to file
         """
-        with Path.cwd().joinpath("settings", "last_run.yaml").open("w") as file:
+        with path.joinpath("settings", "last_run.yaml").open("w") as file:
             yaml.safe_dump(self.last_run, file)
 
     def save_last_job_run(self, job: "Job") -> None:

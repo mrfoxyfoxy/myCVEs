@@ -4,11 +4,11 @@ and to filter new and updated cves for the configured products
 """
 
 import asyncio
+from datetime import datetime
 from typing import AsyncIterable, Optional
 
 import httpx
 from httpx import NetworkError, TimeoutException
-from datetime import datetime
 
 from config import JobStates, Settings, logger
 from container import CVEReport, Job, JobList, JSONDict
@@ -16,22 +16,22 @@ from errors import RequestException, retry
 from formatters import format_parameter_time
 
 
-def create_params(job: Job) -> tuple[dict[str, str], dict[str, str]]: 
+def create_params(job: Job) -> tuple[dict[str, str], dict[str, str]]:
     """
     create parameters for a job
     the keyword parameter is not used because results are not 100% accurate for vendor
     for products would be separate requests needed
     """
-    
+
     params_pub = {
         "pubStartDate": format_parameter_time(job.last_run),
         "pubEndDate": format_parameter_time(datetime.now()),
-        "resultsPerPage": "100"
+        "resultsPerPage": "100",
     }
     params_mod = {
         "modStartDate": params_pub["pubStartDate"],
         "modEndDate": params_pub["pubEndDate"],
-        "resultsPerPage": "100"
+        "resultsPerPage": "100",
     }
     """
     params_pub = {
@@ -46,11 +46,11 @@ def create_params(job: Job) -> tuple[dict[str, str], dict[str, str]]:
         "resultsPerPage": "100",
     }
     """
-    
-    if job.additional_parameters:        
+
+    if job.additional_parameters:
         params_pub.update(job.additional_parameters)
         params_mod.update(job.additional_parameters)
-        
+
     return params_pub, params_mod
 
 
@@ -142,8 +142,14 @@ def sort_and_deduplicate_cves(jobs: JobList) -> JobList:
     return jobs
 
 
-@retry((TimeoutException, NetworkError, RequestException), logger=logger, raises=RequestException)  
-async def make_api_request(settings: Settings, params: dict, client: httpx.AsyncClient) -> JSONDict:
+@retry(
+    (TimeoutException, NetworkError, RequestException),
+    logger=logger,
+    raises=RequestException,
+)
+async def make_api_request(
+    settings: Settings, params: dict, client: httpx.AsyncClient
+) -> JSONDict:
     """
     make one single api request
     put to seperate coroutine to have retries only on a single page not all, if one fails

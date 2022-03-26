@@ -33,7 +33,7 @@ def get_jobs(settings: Settings, states: JobStates) -> Generator[Job, None, None
     for file in settings.job_path.iterdir():
         with file.open("r") as config:
             jobs = yaml.safe_load(config)
-            for job in jobs["jobs"]:                
+            for job in jobs["jobs"]:
                 yield Job(
                     starttime=jobs["starttime"],
                     interval=jobs["interval"],

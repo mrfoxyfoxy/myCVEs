@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 def retry(
-    exceptions_to_check: Union[tuple[Type[Exception],...], Type[Exception]],
+    exceptions_to_check: Union[tuple[Type[Exception], ...], Type[Exception]],
     tries: int = 5,
     delay: Union[int, float] = 1,
     backoff: Union[int, float] = 2,
