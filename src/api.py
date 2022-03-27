@@ -22,7 +22,7 @@ def create_params(job: Job) -> tuple[dict[str, str], dict[str, str]]:
     the keyword parameter is not used because results are not 100% accurate for vendor
     for products would be separate requests needed
     """
-
+    
     params_pub = {
         "pubStartDate": format_parameter_time(job.last_run),
         "pubEndDate": format_parameter_time(datetime.now()),
@@ -47,9 +47,16 @@ def create_params(job: Job) -> tuple[dict[str, str], dict[str, str]]:
     }
     """
 
-    if job.additional_parameters:
-        params_pub.update(job.additional_parameters)
-        params_mod.update(job.additional_parameters)
+    if job.additional_parameters:        
+        for param in job.additional_parameters:
+            if param in ("pubStartDate", "pubEndDate"):                
+                params_pub[param] = job.additional_parameters[param]
+                continue                
+            if param in ("modStartDate", "modEndDate"):                
+                params_mod[param] = job.additional_parameters[param]
+                continue
+            params_pub[param] = job.additional_parameters[param]
+            params_mod[param] = job.additional_parameters[param]
 
     return params_pub, params_mod
 
@@ -158,7 +165,7 @@ async def make_api_request(
     if response.status_code != 200:
         raise RequestException(
             f"Requests not successfull: status code {response.status_code}. {response.json().get('message', 'No error message retrieved')}"
-        )
+        )    
     return response.json()
 
 
@@ -189,7 +196,7 @@ async def get_all_new_pages(
     async for raw_data in get_cve_page(settings, params, client):
         data = raw_data["result"]["CVE_Items"]
         results = [CVEReport(cve) for cve in data]
-        cves.extend(results)
+        cves.extend(results)    
     return cves
 
 

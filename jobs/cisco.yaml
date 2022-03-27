@@ -2,7 +2,9 @@
 starttime: 1
 interval: 1
 updates: true
-send_to: dreadchrisp@gmail.com
+send_to: 
+- dreadchrisp@gmail.com
+- dreadchrisp@aol.com
 jobs:
 - vendor: Cisco
   products: 
@@ -16,5 +18,9 @@ jobs:
   - data_center_network_manager
   - adaptive security appliance 
   - nx-os     
-  additional_parameters: {}    
+  additional_parameters:
+    pubStartDate: 2022-03-01T00:00:00:000 UTC+01:00
+    pubEndDate: 2022-03-05T00:00:00:000 UTC+01:00
+    modStartDate: 2022-03-01T00:00:00:000 UTC+01:00
+    modEndDate: 2022-03-05T00:00:00:000 UTC+01:00 
 ...

@@ -34,17 +34,18 @@ def get_jobs(settings: Settings, states: JobStates) -> Generator[Job, None, None
         with file.open("r") as config:
             jobs = yaml.safe_load(config)
             for job in jobs["jobs"]:
-                yield Job(
-                    starttime=jobs["starttime"],
-                    interval=jobs["interval"],
-                    updates=jobs["updates"],
-                    send_to=jobs["send_to"],
-                    file=file.parts[-1],
-                    last_run=get_last_job_start(
-                        states, file.parts[-1], jobs["interval"]
-                    ),
-                    **job
-                )
+                for address in jobs["send_to"]:
+                    yield Job(
+                        starttime=jobs["starttime"],
+                        interval=jobs["interval"],
+                        updates=jobs["updates"],
+                        send_to=address,
+                        file=file.parts[-1],
+                        last_run=get_last_job_start(
+                            states, file.parts[-1], jobs["interval"]
+                        ),
+                        **job
+                    )
 
 
 def get_job_status(job: Job) -> bool:
@@ -72,10 +73,22 @@ def create_job_groups(settings: Settings, states: JobStates) -> list[JobList]:
     """
     current_jobs = get_current_jobs(settings, states)
     sorted_jobs = sorted(
-        current_jobs, key=lambda job: (round_time(job.last_run), job.interval)
+        current_jobs,
+        key=lambda job: (
+            round_time(job.last_run),
+            job.interval,
+            tuple(job.additional_parameters.keys()),
+            tuple(job.additional_parameters.values()),
+        ),
     )
     grouped_jobs = groupby(
-        sorted_jobs, lambda job: (round_time(job.last_run), job.interval)
+        sorted_jobs,
+        lambda job: (
+            round_time(job.last_run),
+            job.interval,
+            tuple(job.additional_parameters.keys()),
+            tuple(job.additional_parameters.values()),
+        ),
     )
     return [list(jobs[1]) for jobs in grouped_jobs]
 
@@ -85,5 +98,8 @@ def join_jobs_for_recipient(job_groups: list[JobList]):
     group jobs by recipient to send only one email per recipient
     """
     jobs = [job for group in job_groups for job in group]
-    grouped_jobs = groupby(jobs, lambda job: job.send_to)
+    sorted_jobs = sorted(jobs, key=lambda job: job.send_to)
+    grouped_jobs = groupby(sorted_jobs, lambda job: job.send_to)
     return [list(jobs[1]) for jobs in grouped_jobs]
+    
+            

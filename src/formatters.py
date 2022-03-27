@@ -5,7 +5,7 @@ formatter functions
 from datetime import datetime, timedelta
 from typing import Optional
 
-from config import logger
+from config import logger, settings
 from errors import FormatException
 
 
@@ -23,7 +23,8 @@ def format_parameter_time(time: datetime, offset: int = 0) -> str:
     """
     time = time - timedelta(hours=-offset)
     formatted_time = time.strftime("%Y-%m-%dT%H:%M:%S")
-    return f"{formatted_time}:000 UTC+01:00"
+    time_offset = f'-{str(settings.offset).zfill(2)}' if settings.offset < 0 else f'+{str(settings.offset).zfill(2)}'
+    return f"{formatted_time}:000 UTC{time_offset}:00"
 
 
 def format_cpe_match(cpe: Optional[str]) -> Optional[str]:

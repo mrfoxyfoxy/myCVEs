@@ -48,11 +48,5 @@ async def run_jobs(settings: Settings, states: JobStates) -> None:
         filter_errors(mail_results, email_groups, logger)
 
 
-async def main(settings: Settings, states: JobStates):
-    while True:
-        await run_jobs(settings, states)
-        await asyncio.sleep(1800)
-
-
 if __name__ == "__main__":
-    asyncio.run(main(settings, states))
+    asyncio.run(run_jobs(settings, states))

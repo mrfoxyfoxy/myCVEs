@@ -59,9 +59,9 @@ class Settings:
 
     url: str
     log_path: Path
-    job_path: Path
-    admin_email: str
+    job_path: Path    
     api_key: str
+    offset: int
     mail: MailSettings
 
     @classmethod
@@ -80,9 +80,9 @@ class Settings:
         return cls(
             url=settings["url"],
             log_path=path.joinpath(settings["log_path"]),
-            job_path=path.joinpath(settings["job_path"]),
-            admin_email=settings["admin_email"],
+            job_path=path.joinpath(settings["job_path"]),            
             api_key=secrets["api_key"],
+            offset=settings["offset"],
             mail=mail_settings,
         )
 

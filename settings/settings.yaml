@@ -1,15 +1,28 @@
 ---
+# API url
 url: https://services.nvd.nist.gov/rest/json/cves/1.0/
+# relative path containing .yaml files with your jobs
 job_path: jobs
-log_path: logs/cvenotifier.log
-admin_email: admin@fox.world
+# relative path to your logfile
+log_path: logs/mycves.log
+# time offset relative to utc
+offset: 1
+# settings for your mailserver
 mail:
-  sender: infosec@fox.world
+  # sender email address
+  sender: a@b.c
+  # ip or fqdn of your mailserver / email provides
   mailserver: 172.16.13.30
+  # only needed if diffrent from default ports: smtp: 25, smtps(tls): 465, starttls: 587
   port: ""
+  # use smtps (overrides starttls)
   tls: false
+  # user starttls
   starttls: false
+  # verifiy certificates
   verify: false
+  # use authentication
   auth: false
+  # username for authentication
   username: ""  
 ...
