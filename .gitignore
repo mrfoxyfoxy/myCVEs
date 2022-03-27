@@ -133,7 +133,7 @@ dmypy.json
 mycves.log
 
 # states
-last_run.yaml
+last_run.yaml 
 
 # test jobs
 cisco.yaml

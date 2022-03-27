@@ -1,6 +1,6 @@
 # myCVEs
 myCVEs sends you regularly new and updated CVEs for your configured products.
-CVEs are fetched from the NIST CVE API on https://services.nvd.nist.gov/rest/json/cves/1.0/ an filtered according to the jobs configured in the jobs directory.
+CVEs are fetched from the NIST CVE API on https://services.nvd.nist.gov/rest/json/cves/1.0/ and filtered according to the jobs configured in your jobs directory.
 
 ### Requirements:
 - Python 3.8 (only tested with 3.9) either on Windows oder Linux.
@@ -13,21 +13,21 @@ CVEs are fetched from the NIST CVE API on https://services.nvd.nist.gov/rest/jso
 ## Installation:
 
 ### Linux
-    mkdir /opt/myCVEs
-    cd /opt/myCVEs
+    cd /opt    
     git clone https://github.com/mrfoxyfoxy/myCVEs.git	(alternatively you can download the repo manually and paste it to the directory)
+    cd /opt/myCVEs
     python3 -m venv .venv
     source .venv/bin/activate
     pip install -r src/requirements.txt 
     deactivate
-    echo "0 * * * * root python3 /myCVEs/src/main.py" >> /etc/crontab && echo "" >> /etc/crontab
+    echo "0 * * * * root /myCVEs/.venv/bin/python3 /myCVEs/src/main.py" >> /etc/crontab && echo "" >> /etc/crontab
 
 ### Windows
     open a powershell window
 
-    mkdir C:\Program Files\myCVEs
-    cd C:\Program Files\myCVEs 
+    cd C:\Program Files    
     git clone https://github.com/mrfoxyfoxy/myCVEs.git (alternatively you can download the repo manually and paste it to the directory)
+    cd C:\Program Files\myCVEs 
     python3 -m venv .venv
     .venv/Scripts/activate
     pip install -r src/requirements.txt 
@@ -44,9 +44,9 @@ CVEs are fetched from the NIST CVE API on https://services.nvd.nist.gov/rest/jso
     $Task | Set-ScheduledTask -User "[your_windows_username]"
 
 ### Docker
-    mkdir /opt/myCVEs
-    cd /opt/myCVEs
+    cd /opt    
     git clone https://github.com/mrfoxyfoxy/myCVEs.git	
+    cd /opt/myCVEs
     docker pull python:3.9-slim-bullseye
     docker build . -t mycves:0.1.0
     docker-compose up -d
