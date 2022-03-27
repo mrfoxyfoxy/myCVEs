@@ -12,7 +12,7 @@ CVEs are fetched from the NIST CVE API on https://services.nvd.nist.gov/rest/jso
 
 ## Installation:
 
-1. Linux
+### Linux
     mkdir /opt/myCVEs
     cd /opt/myCVEs
     git clone https://github.com/mrfoxyfoxy/myCVEs.git	(alternatively you can download the repo manually and paste it to the directory)
@@ -22,7 +22,7 @@ CVEs are fetched from the NIST CVE API on https://services.nvd.nist.gov/rest/jso
     deactivate
     echo "0 * * * * root python3 /myCVEs/src/main.py" >> /etc/crontab && echo "" >> /etc/crontab
 
-2. Windows
+### Windows
     open a powershell window
 
     mkdir C:\Program Files\myCVEs
@@ -33,7 +33,8 @@ CVEs are fetched from the NIST CVE API on https://services.nvd.nist.gov/rest/jso
     pip install -r src/requirements.txt 
     .venv/Scripts/deactivate
 
-    ### Configuring the Task (alternatively you can configure it manually in the task scheduler)
+    Configuring the Task (alternatively you can configure it manually in the task scheduler):
+
     $action = New-ScheduledTaskAction -Execute 'C:\Program Files\myCVEs\.venv\Scripts\Python.exe' -Argument 'C:\Program Files\myCVEs\src.main.py'
     $trigger =  New-ScheduledTaskTrigger -Daily -At 0am
     Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "myCVEs" -Description "get new and updated CVEs"
@@ -42,7 +43,7 @@ CVEs are fetched from the NIST CVE API on https://services.nvd.nist.gov/rest/jso
     $Task = Get-ScheduledTask -TaskName "myCVEs" 
     $Task | Set-ScheduledTask -User "[your_windows_username]"
 
-3. Docker
+### Docker
     mkdir /opt/myCVEs
     cd /opt/myCVEs
     git clone https://github.com/mrfoxyfoxy/myCVEs.git	
