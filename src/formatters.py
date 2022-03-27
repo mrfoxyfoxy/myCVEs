@@ -23,7 +23,11 @@ def format_parameter_time(time: datetime, offset: int = 0) -> str:
     """
     time = time - timedelta(hours=-offset)
     formatted_time = time.strftime("%Y-%m-%dT%H:%M:%S")
-    time_offset = f'-{str(settings.offset).zfill(2)}' if settings.offset < 0 else f'+{str(settings.offset).zfill(2)}'
+    time_offset = (
+        f"-{str(settings.offset).zfill(2)}"
+        if settings.offset < 0
+        else f"+{str(settings.offset).zfill(2)}"
+    )
     return f"{formatted_time}:000 UTC{time_offset}:00"
 
 

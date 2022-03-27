@@ -101,5 +101,3 @@ def join_jobs_for_recipient(job_groups: list[JobList]):
     sorted_jobs = sorted(jobs, key=lambda job: job.send_to)
     grouped_jobs = groupby(sorted_jobs, lambda job: job.send_to)
     return [list(jobs[1]) for jobs in grouped_jobs]
-    
-            

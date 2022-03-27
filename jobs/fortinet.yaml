@@ -3,7 +3,7 @@ starttime: 1
 interval: 1
 updates: true
 send_to: 
-- dreadchrisp@gmail.com
+- 
 jobs:
 - vendor: Fortinet
   products:
@@ -16,9 +16,5 @@ jobs:
   - fortinet enterprise management server  
   - fortinet ems  
   - forticlient ems  
-  additional_parameters:
-    pubStartDate: 2022-03-01T00:00:00:000 UTC+01:00
-    pubEndDate: 2022-03-05T00:00:00:000 UTC+01:00
-    modStartDate: 2022-03-01T00:00:00:000 UTC+01:00
-    modEndDate: 2022-03-05T00:00:00:000 UTC+01:00
+  additional_parameters: {}
 ...
