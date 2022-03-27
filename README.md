@@ -20,7 +20,7 @@ CVEs are fetched from the NIST CVE API on https://services.nvd.nist.gov/rest/jso
     source .venv/bin/activate
     pip install -r src/requirements.txt 
     deactivate
-    echo "0 * * * * root /myCVEs/.venv/bin/python3 /myCVEs/src/main.py" >> /etc/crontab && echo "" >> /etc/crontab
+    echo "0 * * * * root /opt/myCVEs/.venv/bin/python3 /opt/myCVEs/src/main.py" >> /etc/crontab && echo "" >> /etc/crontab
 
 ### Windows
     open a powershell window
