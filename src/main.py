@@ -45,7 +45,13 @@ async def run_jobs(settings: Settings, states: JobStates) -> None:
             *(send_email(settings, states, group) for group in email_groups),
             return_exceptions=True
         )
-        filter_errors(mail_results, email_groups, logger)
+        successful_jobs = filter_errors(mail_results, email_groups, logger)
+        if len(mail_results) == len(successful_jobs):
+            logger.info("Successfull sent all new cves")
+        elif not successful_jobs:
+            logger.warning("No emails could be sent.")
+        else:
+            logger.warning("Some emails successfull sent, but some errored.")
 
 
 if __name__ == "__main__":

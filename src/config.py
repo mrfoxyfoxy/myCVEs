@@ -6,8 +6,10 @@ initialisation of the settings, states and the logger for the application
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
+import logging
 
 import yaml
+from yaml.scanner import ScannerError
 
 if TYPE_CHECKING:
     from container import Job
@@ -62,6 +64,9 @@ class Settings:
     job_path: Path
     api_key: str
     offset: int
+    bg_heading: str
+    bg_header: str
+    bg_table: str
     mail: MailSettings
 
     @classmethod
@@ -71,9 +76,20 @@ class Settings:
         creates settings object from the configuration files in the hardcoded path
         """
         with path.joinpath("settings", "settings.yaml").open("r") as file:
-            settings = yaml.safe_load(file)
+            try:
+                settings = yaml.safe_load(file)
+            except ScannerError as e:
+                logging.exception(e)
+                logging.error("Could not load settings")
+                exit()
         with path.joinpath("settings", ".secrets.yaml").open("r") as file:
-            secrets = yaml.safe_load(file)
+            try:
+                secrets = yaml.safe_load(file)
+            except ScannerError as e:
+                logging.exception(e)
+                logging.error("Could not load secrets")
+                exit()
+                
         mail_settings = MailSettings(
             **settings["mail"], smtp_password=secrets["smtp_password"]
         )
@@ -83,6 +99,9 @@ class Settings:
             job_path=path.joinpath(settings["job_path"]),
             api_key=secrets["api_key"],
             offset=settings["offset"],
+            bg_heading=settings["bg_heading"],
+            bg_header=settings["bg_header"],
+            bg_table=settings["bg_table"],
             mail=mail_settings,
         )
 

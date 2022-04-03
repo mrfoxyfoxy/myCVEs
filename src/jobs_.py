@@ -7,8 +7,9 @@ from itertools import groupby
 from typing import Generator, Iterable
 
 import yaml
+from yaml.scanner import ScannerError
 
-from config import JobStates, Settings
+from config import JobStates, Settings, logger
 from container import Job, JobList
 from formatters import round_time
 
@@ -32,7 +33,13 @@ def get_jobs(settings: Settings, states: JobStates) -> Generator[Job, None, None
     """
     for file in settings.job_path.iterdir():
         with file.open("r") as config:
-            jobs = yaml.safe_load(config)
+            try:
+                jobs = yaml.safe_load(config)
+            except ScannerError as e:
+                logger.exception(e)
+                logger.error(f'Skipping file {file}')
+                continue
+            
             for job in jobs["jobs"]:
                 for address in jobs["send_to"]:
                     yield Job(

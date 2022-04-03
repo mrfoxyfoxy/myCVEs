@@ -7,17 +7,23 @@ job_path: jobs
 log_path: logs/mycves.log
 # time offset relative to utc
 offset: 1
+# background-color for heading
+bg_heading: "#2355b3"
+# background-color for header
+bg_header: "#2355b3"
+# background-color for table
+bg_table: "#f3f3f3"
 # settings for your mailserver
 mail:
   # sender email address
-  sender: 
+  sender: ich@du.sie
   # ip or fqdn of your mailserver / email provides
-  mailserver: 
+  mailserver: 172.16.13.30
   # only needed if diffrent from default ports: smtp: 25, smtps(tls): 465, starttls: 587
   port: ""
   # use smtps (overrides starttls)
   tls: false
-  # user starttls
+  # use starttls
   starttls: false
   # verifiy certificates
   verify: false
@@ -25,4 +31,5 @@ mail:
   auth: false
   # username for authentication
   username: ""  
+
 ...

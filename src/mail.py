@@ -27,7 +27,7 @@ env = Environment(
     autoescape=select_autoescape(["html"]),
 )
 
-template = env.get_template("email.html")
+template = env.get_template("outlook_email.html")
 
 
 def create_subject_prefix(jobs: JobList) -> str:
@@ -59,7 +59,7 @@ def create_email(settings: Settings, jobs: JobList) -> MIMEMultipart:
     message["From"] = settings.mail.sender
     message["To"] = jobs[0].send_to
     try:
-        html = template.render(jobs=jobs, title=title)
+        html = template.render(jobs=jobs, title=title, settings=settings)
     except Exception as e:
         logger.exception(e)
         raise EmailException("HTML rendering error")
