@@ -16,9 +16,9 @@ bg_table: "#f3f3f3"
 # settings for your mailserver
 mail:
   # sender email address
-  sender: ich@du.sie
+  sender: 
   # ip or fqdn of your mailserver / email provides
-  mailserver: 172.16.13.30
+  mailserver: 
   # only needed if diffrent from default ports: smtp: 25, smtps(tls): 465, starttls: 587
   port: ""
   # use smtps (overrides starttls)
