@@ -136,6 +136,7 @@ last_run.yaml
 cisco.yaml
 fortinet.yaml
 testcenter.py
+mycves.log
 
 # poetry
 poetry.lock

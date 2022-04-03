@@ -1,0 +1,43 @@
+---
+# relative startime of your jobs
+starttime: 6
+# interval of notification (relative to starttime)
+interval: 1
+# get updated cves (not only new ones)
+updates: true
+# receiver email addres of the cves
+send_to: name@mail.tdn
+# jobs to run (one or multiple)
+jobs:
+  # vendor to search for
+- vendor: Cisco
+  # products from the vendor to search for
+  products: 
+  - nexus         
+  - catalyst
+  - annyconnect
+  - annyconnect client
+  - annyconnect_client
+  - dcnm
+  - data center network manager
+  - data_center_network_manager
+  - adaptive security appliance 
+  - nx-os     
+  # additional parameters passed to the NIST API (you can override the default parameters, too)
+  additional_parameters: {}    
+- vendor: Fortinet
+  products:
+  - fortios
+  - fortigate
+  - fortianalyzer
+  - fortimanager
+  - fortiauthenticator
+  - forticlient
+  - fortinet enterprise management server  
+  - fortinet ems  
+  - forticlient ems  
+  # sample of a different start- and end date for modified cves (this will give to the same result for the job everytime)
+  additional_parameters:
+    modStartDate: 2022-03-01T00:00:00:000 UTC+01:00
+    modEndDate: 2022-03-05T00:00:00:000 UTC+01:00
+...
