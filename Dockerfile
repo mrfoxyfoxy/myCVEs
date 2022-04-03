@@ -6,6 +6,6 @@ COPY ./templates /myCVEs/templates
 RUN pip install -r /myCVEs/src/requirements.txt 
 RUN apt update
 RUN apt-get -y install cron  && apt-get install vim -y
-RUN echo "0 * * * * root python3 /myCVEs/src/main.py" >> /etc/crontab && echo "" >> /etc/crontab && touch /myCVEs/logs/mycves.log
+RUN echo "0 * * * * root python3 /myCVEs/src/main.py" >> /etc/crontab && echo "" >> /etc/crontab && && mkdir /myCVEs/logs && touch /myCVEs/logs/mycves.log
 
 CMD ["/bin/bash", "-c", "cron && tail -f /myCVEs/logs/mycves.log"]
