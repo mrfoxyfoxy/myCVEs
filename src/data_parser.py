@@ -17,12 +17,12 @@ def traverse_json(data: "JSON", index: str) -> Optional["JSON"]:
     if isinstance(data, dict):
         if index in data:
             if result := data.get(index):
-                
+
                 if not data.get("children"):
                     return result
                 res = deep_traverse(data, index)
                 res.insert(0, result)
-                
+
                 return res
             elif result is False:
                 return result

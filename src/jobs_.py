@@ -4,8 +4,8 @@ functions for retrieving and filtering the current jobs to run
 
 from datetime import datetime, timedelta
 from itertools import groupby
-from typing import Generator, Iterable
 from pathlib import Path
+from typing import Generator, Iterable
 
 import yaml
 from yaml.scanner import ScannerError
@@ -25,39 +25,43 @@ def get_last_job_start(states: JobStates, file: str, interval: int) -> datetime:
     if file in states.last_run:
         return datetime.strptime(states.last_run[file], "%Y-%m-%d %H:%M:%S")
     else:
-        now = datetime.now() 
-        now -= timedelta(seconds=now.second, microseconds=now.microsecond)        
-        now -= timedelta(hours=interval)         
+        now = datetime.now()
+        now -= timedelta(seconds=now.second, microseconds=now.microsecond)
+        now -= timedelta(hours=interval)
         return now
+
 
 def read_job_files(settings: Settings) -> Generator[tuple[JSONDict, Path], None, None]:
     """
-    generator reading job configs from the configuration folder    
+    generator reading job configs from the configuration folder
     """
     for file in settings.job_path.iterdir():
         with file.open("r") as config:
             try:
-                jobs = yaml.safe_load(config)                           
+                jobs = yaml.safe_load(config)
             except ScannerError as e:
                 logger.exception(e)
-                logger.error(f'Skipping file {file}')
+                logger.error(f"Skipping file {file}")
                 continue
             else:
                 yield jobs, file
 
-def update_job_configs(job_configs: Generator[tuple[JSONDict, Path], None, None], states: JobStates) -> Generator[JSONDict, None, None]:
+
+def update_job_configs(
+    job_configs: Generator[tuple[JSONDict, Path], None, None], states: JobStates
+) -> Generator[JSONDict, None, None]:
     """
     updtate the config dictionary with filename and last runtime of the jobs
     """
     for jobs, file in job_configs:
-        jobs["file"] = file.parts[-1]        
-        jobs["last_run"] = get_last_job_start(
-            states, file.parts[-1], jobs["interval"]
-            )
+        jobs["file"] = file.parts[-1]
+        jobs["last_run"] = get_last_job_start(states, file.parts[-1], jobs["interval"])
         yield jobs
 
 
-def get_jobs(job_configs: Generator[JSONDict, None, None]) -> Generator[Job, None, None]:
+def get_jobs(
+    job_configs: Generator[JSONDict, None, None]
+) -> Generator[Job, None, None]:
     """
     generator yielding jobs from the imported job configs
     """
@@ -72,10 +76,12 @@ def get_jobs(job_configs: Generator[JSONDict, None, None]) -> Generator[Job, Non
                         send_to=address,
                         file=jobs["file"],
                         last_run=jobs["last_run"],
-                        **job
+                        **job,
                     )
                 except Exception as e:
-                    logger.error(f'Jobs for the file {jobs["file"]} could not be created due to the following error:')
+                    logger.error(
+                        f'Jobs for the file {jobs["file"]} could not be created due to the following error:'
+                    )
                     logger.exception(e)
 
 
@@ -92,7 +98,7 @@ def get_job_status(job: Job) -> bool:
 def get_current_jobs(jobs: Generator[Job, None, None]) -> Iterable[Job]:
     """
     filter for all jobs that have to be run now
-    """            
+    """
     return filter(get_job_status, jobs)
 
 
@@ -128,9 +134,8 @@ def create_job_groups(settings: Settings, states: JobStates) -> list[JobList]:
     job_configs = read_job_files(settings)
     updated_job_configs = update_job_configs(job_configs, states)
     jobs = get_jobs(updated_job_configs)
-    current_jobs = get_current_jobs(jobs)  
+    current_jobs = get_current_jobs(jobs)
     return group_jobs(current_jobs)
-    
 
 
 def join_jobs_for_recipient(job_groups: list[JobList]):

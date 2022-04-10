@@ -18,11 +18,11 @@ def round_time(date: datetime) -> datetime:
 
 def format_parameter_time(time: datetime) -> str:
     """
-    format time according to the specified format in the api docs and normalize it to utc  
-    """        
-    formatted_time = time.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")      
+    format time according to the specified format in the api docs and normalize it to utc
+    """
+    formatted_time = time.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
     return f"{formatted_time}:000 UTC+00:00"
-        
+
 
 def format_cpe_match(cpe: Optional[str]) -> Optional[str]:
     """

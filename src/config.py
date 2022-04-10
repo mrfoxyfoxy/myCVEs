@@ -3,10 +3,10 @@ dataclasses containing application-, mail settings and job states
 initialisation of the settings, states and the logger for the application
 """
 
+import logging
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import TYPE_CHECKING
-import logging
 
 import yaml
 from yaml.scanner import ScannerError
@@ -62,7 +62,7 @@ class Settings:
     url: str
     log_path: Path
     job_path: Path
-    api_key: str    
+    api_key: str
     bg_heading: str
     bg_header: str
     bg_table: str
@@ -88,7 +88,7 @@ class Settings:
                 logging.exception(e)
                 logging.error("Could not load secrets")
                 exit()
-                
+
         mail_settings = MailSettings(
             **settings["mail"], smtp_password=secrets["smtp_password"]
         )
@@ -96,7 +96,7 @@ class Settings:
             url=settings["url"],
             log_path=path.joinpath(settings["log_path"]),
             job_path=path.joinpath(settings["job_path"]),
-            api_key=secrets["api_key"],            
+            api_key=secrets["api_key"],
             bg_heading=settings["bg_heading"],
             bg_header=settings["bg_header"],
             bg_table=settings["bg_table"],
@@ -145,7 +145,7 @@ class JobStates:
         now = datetime.now()
         now -= timedelta(seconds=now.second, microseconds=now.microsecond)
         self.last_run[job.file] = now.strftime("%Y-%m-%d %H:%M:%S")
-        
+
 
 settings = Settings.create()
 states = JobStates()
