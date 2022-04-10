@@ -5,8 +5,6 @@ url: https://services.nvd.nist.gov/rest/json/cves/1.0/
 job_path: jobs
 # relative path to your logfile
 log_path: logs/mycves.log
-# time offset relative to utc
-offset: 1
 # background-color for heading
 bg_heading: "#2355b3"
 # background-color for header

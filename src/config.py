@@ -62,8 +62,7 @@ class Settings:
     url: str
     log_path: Path
     job_path: Path
-    api_key: str
-    offset: int
+    api_key: str    
     bg_heading: str
     bg_header: str
     bg_table: str
@@ -97,8 +96,7 @@ class Settings:
             url=settings["url"],
             log_path=path.joinpath(settings["log_path"]),
             job_path=path.joinpath(settings["job_path"]),
-            api_key=secrets["api_key"],
-            offset=settings["offset"],
+            api_key=secrets["api_key"],            
             bg_heading=settings["bg_heading"],
             bg_header=settings["bg_header"],
             bg_table=settings["bg_table"],
