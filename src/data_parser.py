@@ -17,7 +17,13 @@ def traverse_json(data: "JSON", index: str) -> Optional["JSON"]:
     if isinstance(data, dict):
         if index in data:
             if result := data.get(index):
-                return result
+                
+                if not data.get("children"):
+                    return result
+                res = deep_traverse(data, index)
+                res.insert(0, result)
+                
+                return res
             elif result is False:
                 return result
         # ! It is possible that an index is found without a result but it can also be present in deeper layers, too
@@ -27,7 +33,7 @@ def traverse_json(data: "JSON", index: str) -> Optional["JSON"]:
     return None
 
 
-def deep_traverse(data: "JSONDict", index: str) -> "JSON":
+def deep_traverse(data: "JSONDict", index: str) -> list["JSON"]:
     """
     deep traverse through all levels of json data if the index was not found on the first searched level
     """

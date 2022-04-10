@@ -44,7 +44,8 @@ def create_params(job: Job) -> tuple[dict[str, str], dict[str, str]]:
                 continue
             params_pub[param] = job.additional_parameters[param]
             params_mod[param] = job.additional_parameters[param]
-
+    print(f'pubastart {params_pub["pubStartDate"]}')
+    print(f'pubend {params_pub["pubEndDate"]}')
     return params_pub, params_mod
 
 
@@ -120,19 +121,28 @@ def sort_and_deduplicate_cves(jobs: JobList) -> JobList:
     sort cves by base score and remove duplicate entries if a new cve was already updated in the same timeslot
     """
     for job in jobs:
-        if job.new_cves:
-            job.new_cves = sorted(
-                job.new_cves, key=lambda job: job.cve_score.base_score, reverse=True
-            )
-        if job.updated_cves:
+        # ! It's possible that there is no numeric cve score and sorting would fail with an error
+        try:
             if job.new_cves:
-                new_cve_ids = [new_cve.cve.id for new_cve in job.new_cves]
-                job.updated_cves = [
-                    cve for cve in job.updated_cves if not cve.cve.id in new_cve_ids
-                ]
-            job.updated_cves = sorted(
-                job.updated_cves, key=lambda job: job.cve_score.base_score, reverse=True
-            )
+                job.new_cves = sorted(
+                    job.new_cves, key=lambda job: job.cve_score.base_score, reverse=True
+                )            
+        except Exception as e:
+            logger.error(f'Sorting of cves failed with error:')
+            logger.exception(e)
+        try:
+            if job.updated_cves:
+                if job.new_cves:
+                    new_cve_ids = [new_cve.cve.id for new_cve in job.new_cves]
+                    job.updated_cves = [
+                        cve for cve in job.updated_cves if not cve.cve.id in new_cve_ids
+                    ]
+                job.updated_cves = sorted(
+                    job.updated_cves, key=lambda job: job.cve_score.base_score, reverse=True
+                )
+        except Exception as e:
+            logger.error(f'Sorting of cves failed with error:')
+            logger.exception(e)
     return jobs
 
 
@@ -179,11 +189,11 @@ async def get_all_new_pages(
     """
     trigger the requests for one cve and parse the data while starting the next request
     """
-    cves = []
-    async for raw_data in get_cve_page(settings, params, client):
+    cves = []    
+    async for raw_data in get_cve_page(settings, params, client):        
         data = raw_data["result"]["CVE_Items"]
         results = [CVEReport(cve) for cve in data]
-        cves.extend(results)
+        cves.extend(results)        
     return cves
 
 
@@ -217,4 +227,5 @@ async def get_cves_by_group(
     for job in job_group:
         job.new_cves = filter_cves(new_cves, job)
     filtered_group = filter_empty_jobs(states, job_group)
+
     return sort_and_deduplicate_cves(filtered_group)

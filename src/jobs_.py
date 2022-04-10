@@ -24,7 +24,10 @@ def get_last_job_start(states: JobStates, file: str, interval: int) -> datetime:
     if file in states.last_run:
         return datetime.strptime(states.last_run[file], "%Y-%m-%d %H:%M:%S")
     else:
-        return datetime.now() - timedelta(hours=interval)
+        now = datetime.now() 
+        now -= timedelta(seconds=now.second, microseconds=now.microsecond)        
+        now -= timedelta(hours=interval)         
+        return now
 
 
 def get_jobs(settings: Settings, states: JobStates) -> Generator[Job, None, None]:
@@ -42,17 +45,21 @@ def get_jobs(settings: Settings, states: JobStates) -> Generator[Job, None, None
             
             for job in jobs["jobs"]:
                 for address in jobs["send_to"]:
-                    yield Job(
-                        starttime=jobs["starttime"],
-                        interval=jobs["interval"],
-                        updates=jobs["updates"],
-                        send_to=address,
-                        file=file.parts[-1],
-                        last_run=get_last_job_start(
-                            states, file.parts[-1], jobs["interval"]
-                        ),
-                        **job
-                    )
+                    try:
+                        yield Job(
+                            starttime=jobs["starttime"],
+                            interval=jobs["interval"],
+                            updates=jobs["updates"],
+                            send_to=address,
+                            file=file.parts[-1],
+                            last_run=get_last_job_start(
+                                states, file.parts[-1], jobs["interval"]
+                            ),
+                            **job
+                        )
+                    except Exception as e:
+                        logger.error(f'Jobs for the file {file} could not be created due to the following error:')
+                        logger.exception(e)
 
 
 def get_job_status(job: Job) -> bool:

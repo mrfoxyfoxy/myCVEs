@@ -1,0 +1,17 @@
+{% set cy = cycler(1,2) %}
+{% macro row_color(color) -%}
+{% set number = cy.next() %}
+{%- if not number % 2 -%}background-color: {{settings.bg_table}}{%- endif -%}
+{%- endmacro %}
+
+{% macro set_color(cve) -%}
+    {% if cve.cve_score.base_severity == "CRITICAL" %}
+        #700000
+    {% elif cve.cve_score.base_severity == "HIGH" %}
+        #ff0000
+    {% elif cve.cve_score.base_severity == "MEDIUM" %}
+        #ff7b00
+    {% else %}
+        #000000
+    {% endif %}
+{%- endmacro %}

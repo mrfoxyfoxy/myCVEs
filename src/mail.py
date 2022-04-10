@@ -27,14 +27,14 @@ env = Environment(
     autoescape=select_autoescape(["html"]),
 )
 
-template = env.get_template("outlook_email.html")
+template = env.get_template("new_mail.html")
 
 
 def create_subject_prefix(jobs: JobList) -> str:
     """
     check if there are new and/or updated CVEs in the jobs and create message prefix
     """
-    new = any(job.new_cves for job in jobs)
+    new = any(job.new_cves for job in jobs)    
     updated = any(job.updated_cves for job in jobs)
     return "New and updated" if new and updated else "New" if new else "Updated"
 
@@ -58,8 +58,9 @@ def create_email(settings: Settings, jobs: JobList) -> MIMEMultipart:
     message["Subject"] = subject
     message["From"] = settings.mail.sender
     message["To"] = jobs[0].send_to
+    updates = any(job.updated_cves for job in jobs)
     try:
-        html = template.render(jobs=jobs, title=title, settings=settings)
+        html = template.render(jobs=jobs, title=title, updates=updates, settings=settings)
     except Exception as e:
         logger.exception(e)
         raise EmailException("HTML rendering error")

@@ -65,7 +65,7 @@
               {% set severity_color = "#ff0000" %}
               {% elif cve.cve_score.base_severity == "MEDIUM" %}
               {% set severity_color = "#ff7b00" %}
-              {% else %}}
+              {% else %}
               {% set severity_color = "#000000" %}
               {% endif %}
               
@@ -157,6 +157,7 @@
                         <td style="font-family: sans-serif; padding: 12px 15px; font-weight: bold;">Version Start</td>
                         <td style="font-family: sans-serif; padding: 12px 15px; font-weight: bold;">Version End</td>
                       </tr>
+                      {% if cve.cpes %}
                       {% for cpe in cve.cpes %}
                       {% if loop.index0 % 2  %}
                       <tr style="font-family: sans-serif; text-align: left; background-color: {{settings.bg_table}};">
@@ -175,7 +176,10 @@
                           {% endif %}
                         </td>
                       </tr>
-                      {% endfor %}                        
+                      {% endfor %}    
+                      {% else %}                           
+                      <td colspan="5" style="font-family: sans-serif; padding: 12px 15px;">No CPEs found</td>             
+                      {% endif %}
                   </tbody>                    
               </table>  
 

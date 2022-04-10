@@ -5,7 +5,7 @@ formatter functions
 from datetime import datetime, timedelta
 from typing import Optional
 
-from config import logger, settings
+from config import logger
 from errors import FormatException
 
 
@@ -15,7 +15,7 @@ def round_time(date: datetime) -> datetime:
     """
     return date - timedelta(seconds=date.second, microseconds=date.microsecond)
 
-
+'''
 def format_parameter_time(time: datetime, offset: int = 0) -> str:
     """
     format time according to the specified format in the api docs
@@ -29,7 +29,16 @@ def format_parameter_time(time: datetime, offset: int = 0) -> str:
         else f"+{str(settings.offset).zfill(2)}"
     )
     return f"{formatted_time}:000 UTC{time_offset}:00"
-
+'''
+def format_parameter_time(time: datetime) -> str:
+    """
+    format time according to the specified format in the api docs and normalize it to utc  
+    """    
+    # Todo: check for timezone > utc
+    time = time + (datetime.utcnow() - datetime.now())
+    formatted_time = time.strftime("%Y-%m-%dT%H:%M:%S")    
+    return f"{formatted_time}:000 UTC+00:00"
+        
 
 def format_cpe_match(cpe: Optional[str]) -> Optional[str]:
     """

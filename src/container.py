@@ -44,7 +44,7 @@ class Job:
     products: list
     file: str
     last_run: datetime
-    additional_parameters: dict[str, str]
+    additional_parameters: dict[str, str] = field(default_factory=dict)
     new_cves: Optional[list[CVEReport]] = None
     updated_cves: Optional[list[CVEReport]] = None
 
@@ -99,9 +99,9 @@ class CPE:
         get_cpe = partial(recursive_get, data)
         self.vulnerable = get_cpe("vulnerable")
         self.cpe_match = formatters.format_cpe_match(get_cpe("cpe23Uri"))  # type: ignore
-        self.version_start = get_cpe("versionStartIncluding")
-        self.version_end = get_cpe("versionEndExcluding")
-
+        self.version_start = get_cpe("versionStartIncluding") or get_cpe("versionStartExcluding")
+        self.version_end = get_cpe("versionEndIncluding") or get_cpe("versionEndExcluding")
+            
 
 @dataclass
 class CVEScore:
@@ -117,12 +117,12 @@ class CVEScore:
     impact_score: Any = field(init=False)
 
     def __post_init__(self, data):
-        get_cve_score = partial(recursive_get, data)
-        self.attack_vector = get_cve_score("cvssV3", "attackVector")
-        self.base_score = get_cve_score("cvssV3", "baseScore")
-        self.base_severity = get_cve_score("cvssV3", "baseSeverity")
-        self.exploitability_score = get_cve_score("exploitabilityScore")
-        self.impact_score = get_cve_score("impactScore")
+        get_cve_score = partial(recursive_get, data)        
+        self.attack_vector = get_cve_score("baseMetricV3", "cvssV3", "attackVector") or  get_cve_score("baseMetricV2", "cvssV2", "attackVector") or "-"
+        self.base_score = get_cve_score("baseMetricV3", "cvssV3", "baseScore") or get_cve_score("baseMetricV2", "cvssV2", "baseScore") or "-"
+        self.base_severity = get_cve_score("baseMetricV3", "cvssV3", "baseSeverity") or get_cve_score("baseMetricV2", "cvssV2", "severity") or "-"
+        self.exploitability_score = get_cve_score("baseMetricV3", "exploitabilityScore") or get_cve_score("baseMetricV2", "exploitabilityScore") or "-"
+        self.impact_score = get_cve_score("baseMetricV3", "impactScore") or get_cve_score("baseMetricV2", "impactScore") or "-"
 
 
 @dataclass
@@ -142,7 +142,7 @@ class CVEReport:
         """
         get_cve_report = partial(recursive_get, data)
         get_cpes = get_cve_report("configurations", "nodes", "cpe_match")
-        get_cve_score = get_cve_report("impact", "baseMetricV3")
+        get_cve_score = get_cve_report("impact")
         self.cve = CVE(data)  # type: ignore
-        self.cpes = [CPE(cpe) for cpe in get_cpes]  # type: ignore
+        self.cpes = [CPE(cpe) for cpe in get_cpes] # type: ignore
         self.cve_score = CVEScore(get_cve_score)  # type: ignore

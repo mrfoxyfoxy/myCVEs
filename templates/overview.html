@@ -1,0 +1,83 @@
+<!--[if true]>
+<table role="presentation" width="600" align="center" cellpadding="0" cellspacing="0" style="height: 10px; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+    <tr>
+    	<td width="100%">
+<![endif]--> 
+
+<div id="cves"  style="font-family: sans-serif; width: 600px; margin: auto; margin-bottom: 1px; background: white;"> 
+    <table role="presentation" border="0" width="100%" cellspacing="0" style="height: 10px; font-family: sans-serif;">
+    <tr style="font-family: sans-serif;">
+    <td style="font-family: sans-serif;">
+        <h2 id="head" align="center" style="font-size: 28px; margin: 40px 0 20px 0; font-family: sans-serif;">                       
+            <a name="top">CVEs</a>
+        </h2>
+    <table class="content-table" width="100%" cellspacing="0" cellpadding="0" style="font-family: sans-serif; margin: auto; font-size: 0.9em; min-width: 600px; border-radius: 5px 5px 5px 5px; overflow: hidden; box-shadow: 0 0 20px {{settings.bg_table}}; border-collapse: separate; border-spacing: 0; border-bottom: 1px solid {{settings.bg_table}}; border-left: solid 0.25px {{settings.bg_table}}; border-right: solid 0.25px {{settings.bg_table}};"> 
+        <thead style="border-left: 0; border-left: 0;height: 10px; font-family: sans-serif;">
+            <tr style="font-family: sans-serif; color: #ffffff; text-align: center; font-weight: bold; background-color: {{settings.bg_header}};">
+                <th colspan="2" style="font-family: sans-serif; padding: 12px 15px; font-size: 16px;">CVE</th>            
+                <th colspan="1" style="font-family: sans-serif; padding: 12px 15px; font-size: 16px;">Vendor</th>                        
+                <th colspan="1" style="font-family: sans-serif; padding: 12px 15px; font-size: 16px;">Base Score</th>            
+                <th colspan="1" style="font-family: sans-serif; padding: 12px 15px; font-size: 16px;"></th>            
+            </tr>
+        </thead>
+        <tbody style="height: 10px; font-family: sans-serif;">            
+            <tr style="font-family: sans-serif; {{ row_color() }}">
+                <th colspan="1" style="font-family: sans-serif; padding: 12px 15px; font-weight: bold; text-align: center">                                                   
+                  New CVEs
+               </th>    
+               <th colspan="4" style="font-family: sans-serif; padding: 12px 15px; font-weight: bold; text-align: center"></th>                                                  
+            </tr>                       
+            {% for job in jobs %} 
+            {% for cve in job.new_cves %}
+            <tr style="font-family: sans-serif; {{ row_color() }}">
+                <td colspan="2" style="font-family: sans-serif; padding: 12px 15px; text-align: center; font-weight: bold;">                                                   
+                    <a href="#{{cve.cve.id}}">{{cve.cve.id}}</a>
+                </td>  
+                <td colspan="1" style="font-family: sans-serif; padding: 12px 15px; text-align: center; font-weight: bold;">                                                   
+                    {{job.vendor}}                    
+                </td>                                                  
+                <td colspan="1" style="font-family: sans-serif; padding: 12px 15px; text-align: center; font-weight: bold; color: {{ set_color(cve) }}">                                                   
+                    {{cve.cve_score.base_score}}
+                </td> 
+                <td colspan="1" style="padding: 12px 15px;"></td>
+            </tr>            
+            {% endfor %} 
+            {% endfor %}
+            {% if updates %}
+            <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
+                <th colspan="1" style="font-family: sans-serif; padding: 12px 15px; font-weight: bold; text-align: center">                                                   
+                  Updated CVEs                          
+                </th>    
+                <th colspan="4" style="font-family: sans-serif; padding: 12px 15px; font-weight: bold; text-align: center"></th>     
+            </tr>            
+            {% for job in jobs %}
+            {% for cve in job.updated_cves %}
+            <tr style="font-family: sans-serif; text-align: left; ; {{ row_color() }}">
+                <td colspan="2" style="font-family: sans-serif; padding: 12px 15px; text-align: center; font-weight: bold;">                                                   
+                    <a href=#{{cve.cve.id}}>{{cve.cve.id}}</a>
+                </td>  
+                <td colspan="1" style="font-family: sans-serif; padding: 12px 15px; text-align: center; font-weight: bold;">                                                   
+                    {{job.vendor}}
+                </td>           
+                <td colspan="1" style="font-family: sans-serif; padding: 12px 15px; text-align: center; font-weight: bold; color: {{ set_color(cve) }}">                                                   
+                    {{cve.cve_score.base_score}}
+                </td> 
+                <td colspan="1" style="padding: 12px 15px;"></td>
+            </tr>
+            {% endfor %}             
+            {% endfor %}
+            {% endif %}
+        </tbody>                    
+    </table>  
+    </td> 
+    </tr>
+    </table>
+    <br>
+</div>
+
+
+<!--[if true]>
+		</td>
+	</tr>
+</table>
+<![endif]-->

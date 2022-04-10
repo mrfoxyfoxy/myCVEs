@@ -3,7 +3,7 @@ dataclasses containing application-, mail settings and job states
 initialisation of the settings, states and the logger for the application
 """
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import TYPE_CHECKING
 import logging
@@ -144,8 +144,10 @@ class JobStates:
         """
         store successfull run of a single jobs
         """
-        self.last_run[job.file] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
+        now = datetime.now()
+        now -= timedelta(seconds=now.second, microseconds=now.microsecond)
+        self.last_run[job.file] = now.strftime("%Y-%m-%d %H:%M:%S")
+        
 
 settings = Settings.create()
 states = JobStates()
