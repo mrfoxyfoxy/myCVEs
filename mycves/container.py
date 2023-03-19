@@ -143,7 +143,6 @@ class CVEScore:
         elif "cvssMetricV2" in _get_cve_score:
             get_cve_score = partial(recursive_get, _get_cve_score["cvssMetricV2"][0])
         else:
-            logger.error(f"No Metrics found for {data} ")
             get_cve_score = partial(recursive_get, {})
         self.attack_vector = (
             get_cve_score("cvssData", "attackVector")
