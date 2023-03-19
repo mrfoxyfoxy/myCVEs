@@ -3,6 +3,7 @@ parser functions for the retrieved json data from the API response
 """
 
 from typing import TYPE_CHECKING, Optional, Union
+
 from mycves.typing import JSON, JSONDict, JSONList
 
 

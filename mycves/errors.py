@@ -11,7 +11,7 @@ from time import sleep
 from typing import TYPE_CHECKING, Callable, Optional, Type, Union
 
 if TYPE_CHECKING:
-    from container import JobList
+    from mycves.container import JobList
 
 
 def retry(

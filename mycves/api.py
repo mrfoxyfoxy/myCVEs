@@ -83,8 +83,8 @@ def check_for_relevant_cve(cve_report: CVEReport, job: Job) -> bool:
         field.lower()
         for field in (
             # cve_report.cve.assigner,
-            *cve_report.cve.refsource,
-            *cve_report.cve.description,
+            *cve_report.cve.sources,
+            *cve_report.cve.descriptions,
             *(cpe.cpe_match for cpe in cve_report.cpes),
         )
     }

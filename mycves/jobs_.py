@@ -12,8 +12,8 @@ from yaml.scanner import ScannerError
 
 from mycves.config import JobStates, Settings, logger
 from mycves.container import Job, JobList
-from mycves.typing import JSONDict
 from mycves.formatters import round_time
+from mycves.typing import JSONDict
 
 
 def get_last_job_start(states: JobStates, file: str, interval: int) -> datetime:

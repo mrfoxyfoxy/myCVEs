@@ -18,9 +18,9 @@ from aiosmtplib.errors import (
 )
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from config import JobStates, Settings, logger, path
-from container import JobList
-from errors import EmailException, retry
+from mycves.config import JobStates, Settings, logger, path
+from mycves.container import JobList
+from mycves.errors import EmailException, retry
 
 env = Environment(
     loader=FileSystemLoader(path.joinpath("templates")),
