@@ -5,8 +5,8 @@ formatter functions
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
-from config import logger
-from errors import FormatException
+from mycves.config import logger
+from mycves.errors import FormatException
 
 
 def round_time(date: datetime) -> datetime:
@@ -37,14 +37,13 @@ def format_cpe_match(cpe: Optional[str]) -> Optional[str]:
     return None
 
 
-def format_cpe_dates(cpe_date: Optional[str]) -> Optional[str]:
+def format_cve_dates(cve_date: str) -> str:
     """
     format publish/modify date for cpe
     """
-    if cpe_date is not None:
-        try:
-            return cpe_date.split("T")[0]
-        except Exception as e:
-            logger.exception(e)
-            raise FormatException(f"Formating CPE date failed for date {cpe_date}")
-    return None
+    try:
+        return datetime.fromisoformat(cve_date).strftime("%Y-%m-%d")
+        # return cve_date.split("T")[0]
+    except Exception as e:
+        logger.exception(e)
+        raise FormatException(f"Formating Cve date failed for date {cve_date}")

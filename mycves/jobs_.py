@@ -10,9 +10,10 @@ from typing import Generator, Iterable
 import yaml
 from yaml.scanner import ScannerError
 
-from config import JobStates, Settings, logger
-from container import Job, JobList, JSONDict
-from formatters import round_time
+from mycves.config import JobStates, Settings, logger
+from mycves.container import Job, JobList
+from mycves.typing import JSONDict
+from mycves.formatters import round_time
 
 
 def get_last_job_start(states: JobStates, file: str, interval: int) -> datetime:

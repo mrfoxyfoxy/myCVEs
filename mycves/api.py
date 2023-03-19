@@ -10,10 +10,11 @@ from typing import AsyncIterable, Optional
 import httpx
 from httpx import NetworkError, TimeoutException
 
-from config import JobStates, Settings, logger
-from container import CVEReport, Job, JobList, JSONDict
-from errors import RequestException, retry
-from formatters import format_parameter_time
+from mycves.config import JobStates, Settings, logger
+from mycves.container import CVEReport, Job, JobList
+from mycves.errors import RequestException, retry
+from mycves.formatters import format_parameter_time
+from mycves.typing import JSONDict
 
 
 def create_params(job: Job) -> tuple[dict[str, str], dict[str, str]]:
@@ -81,7 +82,7 @@ def check_for_relevant_cve(cve_report: CVEReport, job: Job) -> bool:
     vendor_fields = {
         field.lower()
         for field in (
-            cve_report.cve.assigner,
+            # cve_report.cve.assigner,
             *cve_report.cve.refsource,
             *cve_report.cve.description,
             *(cpe.cpe_match for cpe in cve_report.cpes),

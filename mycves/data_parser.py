@@ -3,12 +3,10 @@ parser functions for the retrieved json data from the API response
 """
 
 from typing import TYPE_CHECKING, Optional, Union
-
-if TYPE_CHECKING:
-    from container import JSON, JSONDict
+from mycves.typing import JSON, JSONDict, JSONList
 
 
-def traverse_json(data: "JSON", index: str) -> Optional["JSON"]:
+def traverse_json(data: "JSON", index: str) -> JSON:
     """
     traverse through json data
     deep traversal will be used for indices which were not found on the next level
@@ -52,7 +50,7 @@ def deep_traverse(data: "JSONDict", index: str) -> list["JSON"]:
     return results
 
 
-def recursive_get(data: "JSON", *indices) -> Optional[Union["JSON", str, int, bool]]:
+def recursive_get(data: "JSON", *indices) -> JSON:
     """
     safely search multiple indexes deep into JSON data from the API response
     """
@@ -64,7 +62,9 @@ def recursive_get(data: "JSON", *indices) -> Optional[Union["JSON", str, int, bo
             return results
 
     # flatten multidimensional lists
-    if results and isinstance(results, list) and isinstance(results[0], list):
-        return [r for res in results for r in res]
-    else:
-        return results
+    # if results and isinstance(results, list) and isinstance(results[0], list):
+    #    return [r for res in results for r in res]
+    while results and isinstance(results, list) and isinstance(results[0], list):
+        results = [r for res in results for r in res]
+    # else:
+    return results

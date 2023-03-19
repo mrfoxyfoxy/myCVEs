@@ -14,133 +14,148 @@
     <tr>
     	<td width="100%">
 <![endif]-->
-<div id="new_cves" style="font-family: sans-serif; width: 600px; margin: auto; margin-bottom: 1px">   
+<div id="new_cves" style="font-family: sans-serif; width: 600px; margin: auto; margin-bottom: 1px">
   <table role="presentation" border="0" width="100%" cellspacing="0" style="height: 10px; font-family: sans-serif;">
-      <tr style="font-family: sans-serif;">
-          <td style="font-family: sans-serif;">
-              <h2 align="center" style="font-size: 28px; margin: 40px 0 20px 0; font-family: sans-serif;">
-                {% if loop.index0 == 0 and cves == job.new_cves %}
-                New CVEs for {{job.vendor}}
-                {% else %}
-                Updated CVEs for {{job.vendor}}
+    <tr style="font-family: sans-serif;">
+      <td style="font-family: sans-serif;">
+        <h2 align="center" style="font-size: 28px; margin: 40px 0 20px 0; font-family: sans-serif;">
+          {% if loop.index0 == 0 and cves == job.new_cves %}
+          New CVEs for {{job.vendor}}
+          {% else %}
+          Updated CVEs for {{job.vendor}}
+          {% endif %}
+        </h2>
+
+        {% for cve in cves %}
+        <table class="content-table" width="100%" cellspacing="0" cellpadding="0"
+          style="font-family: sans-serif; margin: auto; font-size: 0.9em; min-width: 600px; border-radius: 5px 5px 5px 5px; overflow: hidden; box-shadow: 0 0 20px {{settings.bg_table}}; border-collapse: separate; border-spacing: 0; border-bottom: 0px solid {{settings.bg_table}}; border-left: solid 0.25px {{settings.bg_table}}; border-right: solid 0.25px {{settings.bg_table}};">
+          <thead style="border-left: 0; border-right: 0;height: 10px; font-family: sans-serif;">
+            <tr
+              style="font-family: sans-serif; color: #ffffff; text-align: center; font-weight: bold; background-color: {{settings.bg_header}};">
+              <th colspan="5" style="font-family: sans-serif; padding: 12px 14px; font-size: 16px;"><a
+                  name="{{cve.cve.id}}">{{cve.cve.id}}</a></th>
+            </tr>
+          </thead>
+          <tbody style="height: 10px; font-family: sans-serif;">
+            <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
+              <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">
+                Published
+              </td>
+              <td style="font-family: sans-serif; padding: 12px 14px;">
+                {% if cve.cve.published %}
+                {{cve.cve.published}}
                 {% endif %}
-              </h2>
+              </td>
+              <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">
+                Modified
+              </td>
+              <td style="font-family: sans-serif; padding: 12px 14px;">
+                {% if cve.cve.modified %}
+                {{cve.cve.modified}}
+                {% endif %}
+              </td>
+              <td style="font-family: sans-serif; padding: 12px 14px;"></td>
+            </tr>
+            <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
+              <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Vendor</td>
+              <td style="font-family: sans-serif; padding: 12px 14px;">{{job.vendor}}</td>
+              <td style="font-family: sans-serif; padding: 12px 14px;"></td>
+              <td style="font-family: sans-serif; padding: 12px 14px;"></td>
+              <td style="font-family: sans-serif; padding: 12px 14px;"></td>
+            </tr>
+            <tr style="font-family: sans-serif; text-align: left; height: 20px; {{ row_color() }}">
+              <td colspan=5 style="padding: 0 0"></td>
+            </tr>
+            <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
+              <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Base Severity</td>
+              <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Base Score</td>
+              <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Exploitability Score</td>
+              <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Impact Score</td>
+              <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Attack Vector</td>
+            </tr>
+            <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
+              <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold; color: {{ set_color(cve) }}">
+                {{cve.cve_score.base_severity}}</td>
+              <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold; color: {{ set_color(cve) }}">
+                {{cve.cve_score.base_score}}</td>
+              <td style="font-family: sans-serif; padding: 12px 14px;">{{cve.cve_score.exploitability_score}}</td>
+              <td style="font-family: sans-serif; padding: 12px 14px;">{{cve.cve_score.impact_score}}</td>
+              <td style="font-family: sans-serif; padding: 12px 14px;">{{cve.cve_score.attack_vector}}</td>
+            </tr>
+            <tr style="font-family: sans-serif; text-align: left; height: 20px; {{ row_color() }}">
+              <td colspan=5 style="padding: 0 0"></td>
+            </tr>
+            <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
+              <td colspan="5" style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Description</td>
+            </tr>
+            {% for description in cve.cve.descriptions %}
+            <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
+              <td colspan="5" style="font-family: sans-serif; padding: 12px 14px;">{{description}}</td>
+            </tr>
+            {% endfor %}
+            <tr style="font-family: sans-serif; text-align: left; height: 20px; {{ row_color() }}">
+              <td colspan=5 style="padding: 0 0"></td>
+            </tr>
+            <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
+              <td colspan="5" style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">URLs</td>
+            </tr>
+            {% for url in cve.cve.urls %}
+            <tr style="font-family: sans-serif; text-align: left; {{ row_color() }};">
+              <td colspan="5" style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">
+                <a href={{url}} style="color:#0d2692;text-decoration:underline; font-family: sans-serif;">{{url}}</a>
+              </td>
+            </tr>
+            {% endfor %}
+            <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
+              <td colspan="5" style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">
+                <a href=https://nvd.nist.gov/vuln/detail/{{cve.cve.id}}
+                  style="color:#0d2692;text-decoration:underline;font-family: sans-serif;">https://nvd.nist.gov/vuln/detail/{{cve.cve.id}}</a>
+              </td>
+            </tr>
+            <tr style="font-family: sans-serif; text-align: left; height: 20px; {{ row_color() }}">
+              <td colspan=5 style="padding: 0 0"></td>
+            </tr>
+            <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
+              <td colspan="3" style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Affected Product
+              </td>
+              <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Version Start</td>
+              <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Version End</td>
+            </tr>
 
-              {% for cve in cves %}                                                       
-              <table class="content-table" width="100%" cellspacing="0" cellpadding="0" style="font-family: sans-serif; margin: auto; font-size: 0.9em; min-width: 600px; border-radius: 5px 5px 5px 5px; overflow: hidden; box-shadow: 0 0 20px {{settings.bg_table}}; border-collapse: separate; border-spacing: 0; border-bottom: 0px solid {{settings.bg_table}}; border-left: solid 0.25px {{settings.bg_table}}; border-right: solid 0.25px {{settings.bg_table}};"> 
-                  <thead style="border-left: 0; border-right: 0;height: 10px; font-family: sans-serif;">
-                      <tr style="font-family: sans-serif; color: #ffffff; text-align: center; font-weight: bold; background-color: {{settings.bg_header}};">
-                          <th colspan="5" style="font-family: sans-serif; padding: 12px 14px; font-size: 16px;"><a name="{{cve.cve.id}}">{{cve.cve.id}}</a></th>
-                      </tr>
-                  </thead>
-                  <tbody style="height: 10px; font-family: sans-serif;"> 
-                      <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
-                        <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">                                                   
-                          Published                          
-                        </td>                          
-                        <td style="font-family: sans-serif; padding: 12px 14px;">                  
-                          {% if cve.cve.published %}                                   
-                          {{cve.cve.published}}      
-                          {% endif %}                     
-                        </td>
-                        <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">                                        
-                          Modified                          
-                        </td>
-                        <td style="font-family: sans-serif; padding: 12px 14px;">
-                          {% if cve.cve.modified %}                           
-                          {{cve.cve.modified}}                          
-                          {% endif %} 
-                        </td>
-                        <td style="font-family: sans-serif; padding: 12px 14px;"></td>
-                      </tr>                         
-                      <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
-                        <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Vendor</td>                          
-                        <td style="font-family: sans-serif; padding: 12px 14px;">{{job.vendor}}</td>
-                        <td style="font-family: sans-serif; padding: 12px 14px;"></td>
-                        <td style="font-family: sans-serif; padding: 12px 14px;"></td>
-                        <td style="font-family: sans-serif; padding: 12px 14px;"></td>
-                      </tr>         
-                      <tr style="font-family: sans-serif; text-align: left; height: 20px; {{ row_color() }}"><td colspan = 5 style="padding: 0 0"></td></tr>                        
-                      <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
-                        <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Base Severity</td>
-                        <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Base Score</td>
-                        <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Exploitability Score</td>
-                        <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Impact Score</td>
-                        <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Attack Vector</td>
-                      </tr>
-                      <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
-                        <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold; color: {{ set_color(cve) }}">{{cve.cve_score.base_severity}}</td>
-                        <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold; color: {{ set_color(cve) }}">{{cve.cve_score.base_score}}</td>
-                        <td style="font-family: sans-serif; padding: 12px 14px;">{{cve.cve_score.exploitability_score}}</td>
-                        <td style="font-family: sans-serif; padding: 12px 14px;">{{cve.cve_score.impact_score}}</td>
-                        <td style="font-family: sans-serif; padding: 12px 14px;">{{cve.cve_score.attack_vector}}</td>
-                      </tr>
-                      <tr style="font-family: sans-serif; text-align: left; height: 20px; {{ row_color() }}"><td colspan = 5 style="padding: 0 0"></td></tr>  
-                      <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
-                        <td colspan="5" style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Description</td>
-                      </tr>
-                      {% for description in cve.cve.description %}
-                      <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">                                            
-                        <td colspan="5" style="font-family: sans-serif; padding: 12px 14px;">{{description}}</td>
-                      </tr>
-                      {% endfor %}
-                      <tr style="font-family: sans-serif; text-align: left; height: 20px; {{ row_color() }}"><td colspan = 5 style="padding: 0 0"></td></tr>  
-                      <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
-                        <td colspan="5" style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">URLs</td>
-                      </tr>
-                      {% for url in cve.cve.urls %}                                            
-                      <tr style="font-family: sans-serif; text-align: left; {{ row_color() }};">
-                        <td colspan="5" style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">
-                          <a href={{url}} style="color:#0d2692;text-decoration:underline; font-family: sans-serif;">{{url}}</a>                          
-                        </td>
-                      </tr>
-                      {% endfor %}       
-                      <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
-                        <td colspan="5" style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">
-                          <a href=https://nvd.nist.gov/vuln/detail/{{cve.cve.id}} style="color:#0d2692;text-decoration:underline;font-family: sans-serif;">https://nvd.nist.gov/vuln/detail/{{cve.cve.id}}</a>                          
-                        </td>
-                      </tr>                                                                               
-                      <tr style="font-family: sans-serif; text-align: left; height: 20px; {{ row_color() }}"><td colspan = 5 style="padding: 0 0"></td></tr>                      
-                      <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
-                        <td colspan="3" style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Affected Product</td>
-                        <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Version Start</td>
-                        <td style="font-family: sans-serif; padding: 12px 14px; font-weight: bold;">Version End</td>
-                      </tr>
+            {% if cve.cpes %}
+            {% for cpe in cve.cpes %}
+            <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
+              <td colspan="3" style="font-family: sans-serif; padding: 12px 14px;">{{cpe.cpe_match}}</td>
+              <td style="font-family: sans-serif; padding: 12px 14px;">
+                {% if cpe.version_start %}
+                {{cpe.version_start}}
+                {% endif %}
+              </td>
+              <td style="font-family: sans-serif; padding: 12px 14px;">
+                {% if cpe.version_end %}
+                {{cpe.version_end}}
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
+              <td colspan="5" style="font-family: sans-serif; padding: 12px 14px;">No CPEs found</td>
+            </tr>
+            {% endif %}
+            <tr style="font-family: sans-serif; text-align: right; {{ row_color() }}">
+              <td colspan="5" style="font-family: sans-serif; padding: 12px 14px;"><a href=#top>top</a></td>
+            </tr>
+          </tbody>
+        </table>
+</div>
 
-                      {% if cve.cpes %}
-                      {% for cpe in cve.cpes %}                      
-                      <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">                              
-                        <td colspan="3" style="font-family: sans-serif; padding: 12px 14px;">{{cpe.cpe_match}}</td>
-                        <td style="font-family: sans-serif; padding: 12px 14px;">
-                          {% if cpe.version_start %}
-                          {{cpe.version_start}}
-                          {% endif %}
-                        </td>
-                        <td style="font-family: sans-serif; padding: 12px 14px;">
-                          {% if cpe.version_end %}
-                          {{cpe.version_end}}
-                          {% endif %}
-                        </td>
-                      </tr>
-                      {% endfor %}    
-                      {% else %}     
-                      <tr style="font-family: sans-serif; text-align: left; {{ row_color() }}">
-                        <td colspan="5" style="font-family: sans-serif; padding: 12px 14px;">No CPEs found</td>             
-                      </tr>                      
-                      {% endif %}                                        
-                  <tr style="font-family: sans-serif; text-align: right; {{ row_color() }}">
-                    <td colspan="5" style="font-family: sans-serif; padding: 12px 14px;"><a href=#top>top</a></td>             
-                  </tr>                                
-                </tbody>           
-              </table>    
-              </div>            
-              
-              <br>
+<br>
 
-              {% endfor %}
-          </td> 
-       </tr>
-  </table>  
+{% endfor %}
+</td>
+</tr>
+</table>
 </div>
 <!--[if true]>
 		</td>

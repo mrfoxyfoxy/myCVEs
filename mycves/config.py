@@ -12,11 +12,11 @@ import yaml
 from yaml.scanner import ScannerError
 
 if TYPE_CHECKING:
-    from container import Job
+    from mycves.container import Job
 
 from dataclasses import dataclass, field
 
-from logger import get_logger
+from mycves.logger import get_logger
 
 path = Path(__file__).parent.parent
 

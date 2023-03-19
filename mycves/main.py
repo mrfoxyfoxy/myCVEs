@@ -7,11 +7,11 @@ from contextlib import AsyncExitStack
 
 import httpx
 
-from api import get_cves_by_group
-from config import JobStates, Settings, logger, settings, states
-from errors import filter_errors
-from jobs_ import create_job_groups, join_jobs_for_recipient
-from mail import send_email
+from mycves.api import get_cves_by_group
+from mycves.config import JobStates, Settings, logger, settings, states
+from mycves.errors import filter_errors
+from mycves.jobs_ import create_job_groups, join_jobs_for_recipient
+from mycves.mail import send_email
 
 
 async def run_jobs(settings: Settings, states: JobStates) -> None:

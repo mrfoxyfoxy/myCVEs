@@ -1,6 +1,6 @@
 ---
 # API url
-url: https://services.nvd.nist.gov/rest/json/cves/1.0/
+url: https://services.nvd.nist.gov/rest/json/cves/2.0/
 # relative path containing .yaml files with your jobs
 job_path: jobs
 # relative path to your logfile

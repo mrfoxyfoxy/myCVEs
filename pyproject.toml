@@ -19,6 +19,7 @@ mypy = "^0.942"
 pytest = "^7.1.1"
 black = "^22.1.0"
 isort = "^5.10.1"
+pylint = "^2.14.5"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
