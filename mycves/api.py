@@ -27,12 +27,12 @@ def create_params(job: Job) -> tuple[dict[str, str], dict[str, str]]:
     params_pub = {
         "pubStartDate": format_parameter_time(job.last_run),
         "pubEndDate": format_parameter_time(datetime.now()),
-        "resultsPerPage": "100",
+        "resultsPerPage": "2000",  # 100",
     }
     params_mod = {
-        "modStartDate": params_pub["pubStartDate"],
-        "modEndDate": params_pub["pubEndDate"],
-        "resultsPerPage": "100",
+        "lastModStartDate": params_pub["pubStartDate"],
+        "lastModEndDate": params_pub["pubEndDate"],
+        "resultsPerPage": "2000",  # "100",
     }
 
     if job.additional_parameters:
@@ -40,7 +40,7 @@ def create_params(job: Job) -> tuple[dict[str, str], dict[str, str]]:
             if param in ("pubStartDate", "pubEndDate"):
                 params_pub[param] = job.additional_parameters[param]
                 continue
-            if param in ("modStartDate", "modEndDate"):
+            if param in ("lastModStartDate", "lastModEndDate"):
                 params_mod[param] = job.additional_parameters[param]
                 continue
             params_pub[param] = job.additional_parameters[param]
@@ -192,7 +192,8 @@ async def get_all_new_pages(
     """
     cves = []
     async for raw_data in get_cve_page(settings, params, client):
-        data = raw_data["result"]["CVE_Items"]
+        data = raw_data["vulnerabilities"]
+        # data = raw_data["result"]["CVE_Items"]
         results = [CVEReport(cve) for cve in data]
         cves.extend(results)
     return cves

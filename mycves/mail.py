@@ -11,11 +11,8 @@ from ssl import SSLCertVerificationError
 from typing import Optional
 
 import aiosmtplib
-from aiosmtplib.errors import (
-    SMTPConnectError,
-    SMTPConnectTimeoutError,
-    SMTPServerDisconnected,
-)
+from aiosmtplib.errors import (SMTPConnectError, SMTPConnectTimeoutError,
+                               SMTPServerDisconnected)
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from mycves.config import JobStates, Settings, logger, path
